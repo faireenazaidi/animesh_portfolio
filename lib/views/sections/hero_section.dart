@@ -14,12 +14,13 @@ class HeroSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = Get.find<PortfolioController>();
     final isMobile = Responsive.isMobile(context);
+    final isDesktop = Responsive.isDesktop(context);
 
     return Container(
       key: c.heroKey,
       width: double.infinity,
       padding: EdgeInsets.only(
-        top: 140,
+        top: isMobile ? 100 : 140,
         bottom: 80,
         left: isMobile ? 20 : 32,
         right: isMobile ? 20 : 32,
@@ -27,9 +28,9 @@ class HeroSection extends StatelessWidget {
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1160),
-          child: isMobile
-              ? _MobileHero(c: c)
-              : _DesktopHero(c: c),
+          child: isDesktop
+              ? _DesktopHero(c: c)
+              : _MobileHero(c: c),
         ),
       ),
     );
@@ -50,8 +51,8 @@ class _DesktopHero extends StatelessWidget {
         Expanded(
           flex: 9,
           child: Center(
-            child: PhoneFrame(
-              imageUrls: const [
+            child: const PhoneFrame(
+              imageUrls: [
                 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=420&h=900&fit=crop&q=80',
                 'https://images.unsplash.com/photo-1631815588090-d4bfec5b1b98?w=420&h=900&fit=crop&q=80',
                 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=420&h=900&fit=crop&q=80',
@@ -75,10 +76,10 @@ class _MobileHero extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _HeroContent(c: c),
-        const SizedBox(height: 56),
+        const SizedBox(height: 48),
         Center(
-          child: PhoneFrame(
-            imageUrls: const [
+          child: const PhoneFrame(
+            imageUrls: [
               'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=420&h=900&fit=crop&q=80',
               'https://images.unsplash.com/photo-1631815588090-d4bfec5b1b98?w=420&h=900&fit=crop&q=80',
               'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=420&h=900&fit=crop&q=80',
@@ -99,6 +100,14 @@ class _HeroContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = Responsive.isMobile(context);
+    final isTablet = Responsive.isTablet(context);
+
+    double fontSize = 58;
+    if (isMobile) {
+      fontSize = 36;
+    } else if (isTablet) {
+      fontSize = 46;
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,16 +126,19 @@ class _HeroContent extends StatelessWidget {
               AnimatedContainer(
                 duration: const Duration(milliseconds: 500),
                 width: 7, height: 7,
-                decoration: const BoxDecoration(
-                  color: AppColors.accent,
+                decoration: BoxDecoration(
+                  color: accent(context),
                   shape: BoxShape.circle,
                 ),
               ),
               const SizedBox(width: 8),
-              Text(
-                'Open to opportunities · Lucknow',
-                style: GoogleFonts.jetBrainsMono(
-                  fontSize: 12, color: ink2(context),
+              Flexible(
+                child: Text(
+                  'Open to opportunities · Lucknow, India',
+                  style: GoogleFonts.jetBrainsMono(
+                    fontSize: 12, color: ink2(context),
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -141,7 +153,7 @@ class _HeroContent extends StatelessWidget {
             TextSpan(
               text: 'Building apps\nthat ',
               style: GoogleFonts.fraunces(
-                fontSize: isMobile ? 36 : 58,
+                fontSize: fontSize,
                 fontWeight: FontWeight.w400,
                 color: ink(context),
                 height: 1.05,
@@ -151,9 +163,9 @@ class _HeroContent extends StatelessWidget {
             TextSpan(
               text: 'actually',
               style: GoogleFonts.fraunces(
-                fontSize: isMobile ? 36 : 58,
+                fontSize: fontSize,
                 fontWeight: FontWeight.w400,
-                color: AppColors.accent,
+                color: accent(context),
                 fontStyle: FontStyle.italic,
                 height: 1.05,
                 letterSpacing: -1.0,
@@ -162,7 +174,7 @@ class _HeroContent extends StatelessWidget {
             TextSpan(
               text: '\nship to ',
               style: GoogleFonts.fraunces(
-                fontSize: isMobile ? 36 : 58,
+                fontSize: fontSize,
                 fontWeight: FontWeight.w400,
                 color: ink(context),
                 height: 1.05,
@@ -172,7 +184,7 @@ class _HeroContent extends StatelessWidget {
             TextSpan(
               text: c.typedText.value,
               style: GoogleFonts.fraunces(
-                fontSize: isMobile ? 36 : 58,
+                fontSize: fontSize,
                 fontWeight: FontWeight.w400,
                 height: 1.05,
                 letterSpacing: -1.0,
@@ -187,9 +199,9 @@ class _HeroContent extends StatelessWidget {
                 opacity: c.showCursor.value ? 1 : 0,
                 duration: const Duration(milliseconds: 100),
                 child: Container(
-                  width: 3, height: isMobile ? 34 : 52,
+                  width: 3, height: fontSize * 0.9,
                   margin: const EdgeInsets.only(left: 2, bottom: 4),
-                  color: AppColors.accent,
+                  color: accent(context),
                 ),
               )),
             ),
@@ -199,18 +211,18 @@ class _HeroContent extends StatelessWidget {
         const SizedBox(height: 24),
 
         Text(
-          "I'm Animesh Pratap Singh — Android developer with 4+ years in Java, Kotlin, and Flutter. From first wireframe to Play Store, solo.",
+          "I'm Animesh Pratap Singh — Android & Flutter developer with 4+ years building high-impact mobile solutions in Java, Kotlin, and Flutter. From first wireframe to Play Store release, solo.",
           style: GoogleFonts.inter(
             fontSize: 16, color: ink2(context), height: 1.75,
           ),
-          maxLines: 4,
         ).animate().fadeIn(duration: 700.ms, delay: 200.ms),
 
-        const SizedBox(height: 36),
+        const SizedBox(height: 32),
 
-        // CTA buttons
+        // CTA buttons including Resume Download
         Wrap(
           spacing: 12, runSpacing: 12,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             _HeroBtn(
               label: 'See the work ↓',
@@ -222,10 +234,24 @@ class _HeroContent extends StatelessWidget {
               primary: false,
               onTap: () => c.scrollToSection(c.contactKey),
             ),
+            // Resume Download CTA
+            ResumeButton(resumeUrl: c.resumeUrl),
           ],
         ).animate().fadeIn(duration: 700.ms, delay: 300.ms),
 
-        const SizedBox(height: 52),
+        const SizedBox(height: 28),
+
+        // Social Links Row
+        Row(
+          children: c.socialLinks
+              .map((s) => Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: SocialIconButton(social: s),
+                  ))
+              .toList(),
+        ).animate().fadeIn(duration: 700.ms, delay: 350.ms),
+
+        const SizedBox(height: 48),
 
         // Stats
         Container(
@@ -274,18 +300,18 @@ class _HeroBtnState extends State<_HeroBtn> {
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
           decoration: BoxDecoration(
             color: widget.primary
-                ? (_hovered ? const Color(0xFFD4FF70) : AppColors.accent)
+                ? (_hovered ? accentHover(context) : accent(context))
                 : (_hovered ? bg3(context) : Colors.transparent),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: widget.primary
-                  ? AppColors.accent
+                  ? accent(context)
                   : line2(context),
             ),
             boxShadow: widget.primary && _hovered
                 ? [
                     BoxShadow(
-                      color: AppColors.accent.withOpacity(0.35),
+                      color: accent(context).withOpacity(0.35),
                       blurRadius: 20, offset: const Offset(0, 8),
                     ),
                   ]
@@ -295,7 +321,7 @@ class _HeroBtnState extends State<_HeroBtn> {
             widget.label,
             style: GoogleFonts.inter(
               fontSize: 14, fontWeight: FontWeight.w500,
-              color: widget.primary ? AppColors.accentInk : ink(context),
+              color: widget.primary ? accentInk(context) : ink(context),
             ),
           ),
         ),

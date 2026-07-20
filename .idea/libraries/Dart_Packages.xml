@@ -75,7 +75,7 @@
         <entry key="flutter">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../../flutter/packages/flutter/lib" />
+              <option value="C:/src/flutter/packages/flutter/lib" />
             </list>
           </value>
         </entry>
@@ -103,14 +103,14 @@
         <entry key="flutter_test">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../../flutter/packages/flutter_test/lib" />
+              <option value="C:/src/flutter/packages/flutter_test/lib" />
             </list>
           </value>
         </entry>
         <entry key="flutter_web_plugins">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../../flutter/packages/flutter_web_plugins/lib" />
+              <option value="C:/src/flutter/packages/flutter_web_plugins/lib" />
             </list>
           </value>
         </entry>
@@ -313,7 +313,7 @@
         <entry key="sky_engine">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../../flutter/bin/cache/pkg/sky_engine/lib" />
+              <option value="C:/src/flutter/bin/cache/pkg/sky_engine/lib" />
             </list>
           </value>
         </entry>
@@ -474,10 +474,10 @@
       </option>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../../../flutter/bin/cache/pkg/sky_engine/lib" />
-      <root url="file://$PROJECT_DIR$/../../../flutter/packages/flutter/lib" />
-      <root url="file://$PROJECT_DIR$/../../../flutter/packages/flutter_test/lib" />
-      <root url="file://$PROJECT_DIR$/../../../flutter/packages/flutter_web_plugins/lib" />
+      <root url="file://C:/src/flutter/bin/cache/pkg/sky_engine/lib" />
+      <root url="file://C:/src/flutter/packages/flutter/lib" />
+      <root url="file://C:/src/flutter/packages/flutter_test/lib" />
+      <root url="file://C:/src/flutter/packages/flutter_web_plugins/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter_pub_cache/hosted/pub.dev/args-2.7.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter_pub_cache/hosted/pub.dev/async-2.13.1/lib" />
       <root url="file://$PROJECT_DIR$/../../../flutter_pub_cache/hosted/pub.dev/boolean_selector-2.1.2/lib" />

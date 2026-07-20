@@ -59,7 +59,7 @@ class _InfiniteMarqueeState extends State<_InfiniteMarquee>
               progress: _anim.value,
               items: all,
               textColor: ink3(context),
-              accentColor: AppColors.accent,
+              accentColor: accent(context),
             ),
             child: const SizedBox.expand(),
           );

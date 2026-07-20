@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../controllers/portfolio_controller.dart';
@@ -15,6 +14,7 @@ class WorkSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = Get.find<PortfolioController>();
     final isMobile = Responsive.isMobile(context);
+    final isDesktop = Responsive.isDesktop(context);
 
     return Container(
       key: c.workKey,
@@ -28,20 +28,24 @@ class WorkSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SectionHeader(
-                eyebrow: 'SELECTED WORK',
-                title: 'Apps built end to end.',
-                subtitle:
-                    'Healthcare, nutrition, clinical reference, exam prep — each designed, built, tested, and shipped.',
+              const ScrollAnimate(
+                child: SectionHeader(
+                  eyebrow: 'SELECTED WORK',
+                  title: 'Apps Built & Shipped',
+                  subtitle:
+                      'Healthcare suites, food nutrition breakdowns, clinical tools, exam prep — built, tested, and shipped end-to-end.',
+                ),
               ),
               const SizedBox(height: 72),
               ...List.generate(c.projects.length, (i) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 120),
-                  child: _ProjectRow(
-                    project: c.projects[i],
-                    flip: !isMobile && i % 2 == 1,
-                    isMobile: isMobile,
+                  child: ScrollAnimate(
+                    child: _ProjectRow(
+                      project: c.projects[i],
+                      flip: isDesktop && i % 2 == 1,
+                      isDesktop: isDesktop,
+                    ),
                   ),
                 );
               }),
@@ -56,12 +60,12 @@ class WorkSection extends StatelessWidget {
 class _ProjectRow extends StatelessWidget {
   final ProjectModel project;
   final bool flip;
-  final bool isMobile;
+  final bool isDesktop;
 
   const _ProjectRow({
     required this.project,
     required this.flip,
-    required this.isMobile,
+    required this.isDesktop,
   });
 
   @override
@@ -70,17 +74,11 @@ class _ProjectRow extends StatelessWidget {
       imageUrls: project.imageUrls,
       width: 210,
       height: 440,
-    )
-        .animate()
-        .fadeIn(duration: 800.ms)
-        .slideY(begin: 0.2, end: 0);
+    );
 
-    final Widget infoWidget = _ProjectInfo(project: project)
-        .animate()
-        .fadeIn(duration: 700.ms, delay: 120.ms)
-        .slideY(begin: 0.15, end: 0);
+    final Widget infoWidget = _ProjectInfo(project: project);
 
-    if (isMobile) {
+    if (!isDesktop) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -119,13 +117,17 @@ class _ProjectInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasPlayStore = project.link.isNotEmpty;
+    final hasGithub = project.githubLink != null && project.githubLink!.isNotEmpty;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${project.index} / app',
+          '${project.index} / FEATURED APP',
           style: GoogleFonts.jetBrainsMono(
             fontSize: 11,
+            fontWeight: FontWeight.w600,
             color: ink3(context),
           ),
         ),
@@ -133,7 +135,7 @@ class _ProjectInfo extends StatelessWidget {
         Text(
           project.name,
           style: GoogleFonts.fraunces(
-            fontSize: 30,
+            fontSize: 32,
             fontWeight: FontWeight.w400,
             color: ink(context),
           ),
@@ -144,7 +146,7 @@ class _ProjectInfo extends StatelessWidget {
           style: GoogleFonts.inter(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: AppColors.accent,
+            color: accent(context),
           ),
         ),
         const SizedBox(height: 14),
@@ -163,12 +165,28 @@ class _ProjectInfo extends StatelessWidget {
           children: project.stack.map((s) => StackPill(s)).toList(),
         ),
         const SizedBox(height: 26),
-        AppLinkCard(
-          title: project.link.isEmpty ? 'Internal project' : 'On Google Play',
-          subtitle: project.link.isEmpty
-              ? 'Contact for details'
-              : project.link.replaceFirst('https://', ''),
-          url: project.link.isEmpty ? null : project.link,
+
+        // Action Link Cards (Play Store & GitHub)
+        Column(
+          children: [
+            AppLinkCard(
+              title: hasPlayStore ? 'Live on Google Play' : 'Internal Clinical Project',
+              subtitle: hasPlayStore
+                  ? project.link.replaceFirst('https://', '')
+                  : 'Built for specialized clinical workflow',
+              url: hasPlayStore ? project.link : null,
+              icon: Icons.shop_rounded,
+            ),
+            if (hasGithub) ...[
+              const SizedBox(height: 12),
+              AppLinkCard(
+                title: 'GitHub Source Code',
+                subtitle: project.githubLink!.replaceFirst('https://', ''),
+                url: project.githubLink,
+                icon: Icons.code_rounded,
+              ),
+            ],
+          ],
         ),
       ],
     );

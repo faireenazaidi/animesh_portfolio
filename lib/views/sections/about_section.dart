@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../controllers/portfolio_controller.dart';
@@ -14,6 +13,7 @@ class AboutSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = Get.find<PortfolioController>();
     final isMobile = Responsive.isMobile(context);
+    final isDesktop = Responsive.isDesktop(context);
 
     return Container(
       key: c.aboutKey,
@@ -24,7 +24,7 @@ class AboutSection extends StatelessWidget {
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1160),
-          child: isMobile ? _MobileAbout(c: c) : _DesktopAbout(c: c),
+          child: isDesktop ? _DesktopAbout(c: c) : _MobileAbout(c: c),
         ),
       ),
     );
@@ -42,12 +42,17 @@ class _DesktopAbout extends StatelessWidget {
       children: [
         Expanded(
           flex: 8,
-          child: _ProfileCard().animate().fadeIn(duration: 700.ms).slideY(begin: 0.2, end: 0),
+          child: ScrollAnimate(
+            child: _ProfileCard(c: c),
+          ),
         ),
         const SizedBox(width: 80),
         Expanded(
           flex: 12,
-          child: _AboutBody(c: c).animate().fadeIn(duration: 700.ms, delay: 150.ms).slideY(begin: 0.15, end: 0),
+          child: ScrollAnimate(
+            delay: const Duration(milliseconds: 150),
+            child: _AboutBody(c: c),
+          ),
         ),
       ],
     );
@@ -63,19 +68,22 @@ class _MobileAbout extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _ProfileCard(),
+        ScrollAnimate(child: _ProfileCard(c: c)),
         const SizedBox(height: 40),
-        _AboutBody(c: c),
+        ScrollAnimate(delay: const Duration(milliseconds: 150), child: _AboutBody(c: c)),
       ],
     );
   }
 }
 
 class _ProfileCard extends StatelessWidget {
+  final PortfolioController c;
+  const _ProfileCard({required this.c});
+
   @override
   Widget build(BuildContext context) {
     final skills = ['Java', 'Kotlin', 'Flutter', 'Firebase',
-      'SQLite', 'REST APIs', 'MongoDB', 'Material Design'];
+      'SQLite', 'REST APIs', 'Room DB', 'Material 3'];
 
     return Container(
       padding: const EdgeInsets.all(32),
@@ -90,24 +98,24 @@ class _ProfileCard extends StatelessWidget {
           Container(
             width: 72, height: 72,
             decoration: BoxDecoration(
-              color: AppColors.accent,
+              color: accent(context),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Center(
               child: Text('AP',
                 style: GoogleFonts.fraunces(
                   fontSize: 26, fontWeight: FontWeight.w400,
-                  color: AppColors.accentInk,
+                  color: accentInk(context),
                 )),
             ),
           ),
           const SizedBox(height: 20),
           Text('Animesh Pratap Singh',
             style: GoogleFonts.fraunces(
-              fontSize: 22, fontWeight: FontWeight.w400, color: ink(context),
+              fontSize: 24, fontWeight: FontWeight.w400, color: ink(context),
             )),
           const SizedBox(height: 4),
-          Text('Android Developer · Criterion Tech',
+          Text('Android & Flutter Developer · Criterion Tech',
             style: GoogleFonts.inter(fontSize: 13, color: ink3(context))),
           const SizedBox(height: 20),
           Wrap(
@@ -125,6 +133,9 @@ class _ProfileCard extends StatelessWidget {
                 )),
             )).toList(),
           ),
+          const SizedBox(height: 28),
+          // Download CV Button
+          ResumeButton(resumeUrl: c.resumeUrl, fullWidth: true),
         ],
       ),
     );
@@ -141,30 +152,38 @@ class _AboutBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SectionHeader(
-          eyebrow: 'ABOUT',
-          title: 'Background',
+          eyebrow: 'ABOUT ME',
+          title: 'Background & Philosophy',
         ),
         const SizedBox(height: 28),
         Text(
-          "Four-plus years building Android apps end to end — design, development, deployment, and maintenance. Currently at Criterion Tech in Lucknow across the full software lifecycle: requirements, UI, code, testing, and Play Store delivery.",
+          "Four-plus years building production mobile applications end-to-end — architectural planning, UI/UX design implementation, backend integration, testing, and Google Play Store delivery.",
           style: GoogleFonts.inter(
             fontSize: 16, color: ink2(context), height: 1.8,
           ),
         ),
         const SizedBox(height: 18),
         Text(
-          "Java and Kotlin for native Android, Flutter when the project needs a cross-platform path, and Firebase for auth, push, analytics, and crash reporting. Integrated Google, Facebook, Twitter, and LinkedIn login flows, Maps and YouTube APIs.",
+          "Currently at Criterion Tech in Lucknow, handling the full software development lifecycle. Specialized in native Java & Kotlin alongside cross-platform Flutter. Built healthcare suites, clinical decision support tools, nutritional calculators, and exam prep portals.",
           style: GoogleFonts.inter(
             fontSize: 16, color: ink2(context), height: 1.8,
           ),
         ),
         const SizedBox(height: 18),
-        Text("GNIIT in Cloud Software Engineering from NIIT Lucknow, B.Com from Avadh University.",
+        Text(
+          "GNIIT distinction graduate in Cloud Software Engineering from NIIT Lucknow, B.Com from Avadh University.",
           style: GoogleFonts.inter(
             fontSize: 16, color: ink2(context), height: 1.8,
           ),
         ),
         const SizedBox(height: 36),
+        Text(
+          'Academic Background',
+          style: GoogleFonts.fraunces(
+            fontSize: 20, fontWeight: FontWeight.w400, color: ink(context),
+          ),
+        ),
+        const SizedBox(height: 14),
         Container(
           decoration: BoxDecoration(
             border: Border(top: BorderSide(color: line(context))),
