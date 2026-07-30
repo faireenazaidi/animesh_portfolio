@@ -19,52 +19,54 @@ class PortfolioPage extends GetView<PortfolioController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(71),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: const [
-            ScrollProgressBar(),
-            AppNavBar(),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(71),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ScrollProgressBar(),
+              AppNavBar(),
+            ],
+          ),
         ),
-      ),
-
-      // Responsive Mobile Navigation Drawer
-      endDrawer: const MobileNavDrawer(),
-
-      body: SingleChildScrollView(
-        controller: controller.scrollController,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const HeroSection(),
-            const Divider(height: 1),
-            const MarqueeSection(),
-            const Divider(height: 1),
-            const NowSection(),
-            const Divider(height: 1),
-            const WorkSection(),
-            const Divider(height: 1),
-            const SkillsSection(),
-            const Divider(height: 1),
-            const ExperienceSection(),
-            const Divider(height: 1),
-            const CertificationsSection(),
-            const Divider(height: 1),
-            const TestimonialsSection(),
-            const Divider(height: 1),
-            const AboutSection(),
-            const Divider(height: 1),
-            const ContactSection(),
-            const _Footer(),
-          ],
+      
+        // Responsive Mobile Navigation Drawer
+        endDrawer: const MobileNavDrawer(),
+      
+        body: SingleChildScrollView(
+          controller: controller.scrollController,
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              HeroSection(),
+              Divider(height: 1),
+              MarqueeSection(),
+              Divider(height: 1),
+              NowSection(),
+              Divider(height: 1),
+              WorkSection(),
+              Divider(height: 1),
+              SkillsSection(),
+              Divider(height: 1),
+              ExperienceSection(),
+              Divider(height: 1),
+              CertificationsSection(),
+              Divider(height: 1),
+              TestimonialsSection(),
+              Divider(height: 1),
+              AboutSection(),
+              Divider(height: 1),
+              ContactSection(),
+              _Footer(),
+            ],
+          ),
         ),
+      
+        // ── Floating back-to-top ──
+        floatingActionButton: const BackToTopButton(),
       ),
-
-      // ── Floating back-to-top ──
-      floatingActionButton: const BackToTopButton(),
     );
   }
 }

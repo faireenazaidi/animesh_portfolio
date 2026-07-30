@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
 import '../../controllers/portfolio_controller.dart';
-import '../../theme/app_theme.dart';
 import '../../utils/responsive.dart';
 import '../widgets/shared_widgets.dart';
 
@@ -47,18 +47,29 @@ class _DesktopHero extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(flex: 11, child: _HeroContent(c: c)),
-        const SizedBox(width: 60),
+        const SizedBox(width: 40),
         Expanded(
           flex: 9,
           child: Center(
-            child: const PhoneFrame(
-              imageUrls: [
-                'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=420&h=900&fit=crop&q=80',
-                'https://images.unsplash.com/photo-1631815588090-d4bfec5b1b98?w=420&h=900&fit=crop&q=80',
-                'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=420&h=900&fit=crop&q=80',
-              ],
+            child: const SizedBox(
+              width: 440,
+              height: 540,
+              child: ModelViewer(
+                src: 'assets/models/avatar.glb',
+                alt: 'Animesh 3D Avatar',
+                autoRotate: true,
+                autoRotateDelay: 0,
+                rotationPerSecond: '15deg',
+                cameraControls: true,
+                disableZoom: false,
+                shadowIntensity: 1,
+                cameraOrbit: '0deg 75deg 140%',
+                fieldOfView: '30deg',
+                backgroundColor: Colors.transparent,
+                loading: Loading.eager,
+              ),
             ).animate().fadeIn(duration: 800.ms, delay: 300.ms)
-              .slideY(begin: 0.3, end: 0),
+              .slideY(begin: 0.2, end: 0),
           ),
         ),
       ],
@@ -78,14 +89,23 @@ class _MobileHero extends StatelessWidget {
         _HeroContent(c: c),
         const SizedBox(height: 48),
         Center(
-          child: const PhoneFrame(
-            imageUrls: [
-              'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=420&h=900&fit=crop&q=80',
-              'https://images.unsplash.com/photo-1631815588090-d4bfec5b1b98?w=420&h=900&fit=crop&q=80',
-              'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=420&h=900&fit=crop&q=80',
-            ],
-            width: 200,
-            height: 420,
+          child: const SizedBox(
+            width: 320,
+            height: 440,
+            child: ModelViewer(
+              src: 'assets/models/avatar.glb',
+              alt: 'Animesh 3D Avatar',
+              autoRotate: true,
+              autoRotateDelay: 0,
+              rotationPerSecond: '15deg',
+              cameraControls: true,
+              disableZoom: false,
+              shadowIntensity: 1,
+              cameraOrbit: '0deg 75deg 140%',
+              fieldOfView: '30deg',
+              backgroundColor: Colors.transparent,
+              loading: Loading.eager,
+            ),
           ).animate().fadeIn(duration: 800.ms, delay: 300.ms),
         ),
       ],

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../controllers/portfolio_controller.dart';
 import '../../models/models.dart';
-import '../../theme/app_theme.dart';
 import '../../utils/responsive.dart';
 import '../widgets/shared_widgets.dart';
 

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../controllers/portfolio_controller.dart';
 import '../../models/models.dart';
-import '../../theme/app_theme.dart';
 import '../../utils/responsive.dart';
 import '../widgets/shared_widgets.dart';
 
@@ -78,79 +77,84 @@ class _ExperienceTimelineTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Timeline Node & Bar
-          Column(
-            children: [
-              Container(
-                width: 18,
-                height: 18,
-                margin: const EdgeInsets.only(top: 4),
-                decoration: BoxDecoration(
-                  color: accent(context),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: bg(context),
-                    width: 3,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: accent(context).withOpacity(0.4),
-                      blurRadius: 10,
-                    ),
-                  ],
-                ),
-              ),
-              if (!isLast)
-                Expanded(
-                  child: Container(
-                    width: 2,
-                    margin: const EdgeInsets.symmetric(vertical: 6),
-                    color: line2(context),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 24),
-
-          // Content Card
-          Expanded(
+    return Stack(
+      children: [
+        // Connecting Timeline Line (stretches to tile bottom without forcing height constraints)
+        if (!isLast)
+          Positioned(
+            left: 8,
+            top: 22,
+            bottom: 0,
             child: Container(
-              margin: const EdgeInsets.only(bottom: 40),
-              padding: EdgeInsets.all(isMobile ? 20 : 28),
+              width: 2,
+              color: line2(context),
+            ),
+          ),
+
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Timeline Dot Node
+            Container(
+              width: 18,
+              height: 18,
+              margin: const EdgeInsets.only(top: 4),
               decoration: BoxDecoration(
-                color: bg2(context),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: line2(context)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Period & Location
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        experience.period,
-                        style: GoogleFonts.jetBrainsMono(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: accent(context),
-                        ),
-                      ),
-                      Text(
-                        experience.location,
-                        style: GoogleFonts.inter(
-                          fontSize: 12,
-                          color: ink3(context),
-                        ),
-                      ),
-                    ],
+                color: accent(context),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: bg(context),
+                  width: 3,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: accent(context).withOpacity(0.4),
+                    blurRadius: 10,
                   ),
-                  const SizedBox(height: 10),
+                ],
+              ),
+            ),
+            const SizedBox(width: 24),
+
+            // Content Card
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 40),
+                padding: EdgeInsets.all(isMobile ? 20 : 28),
+                decoration: BoxDecoration(
+                  color: bg2(context),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: line2(context)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Period & Location
+                    Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 8,
+                      runSpacing: 4,
+                      children: [
+                        Text(
+                          experience.period,
+                          style: GoogleFonts.jetBrainsMono(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: accent(context),
+                          ),
+                        ),
+                        Text(
+                          experience.location,
+                          style: GoogleFonts.inter(
+                            fontSize: 12,
+                            color: ink3(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
 
                   // Role & Company
                   Text(
@@ -220,6 +224,7 @@ class _ExperienceTimelineTile extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ],
+  );
+}
 }

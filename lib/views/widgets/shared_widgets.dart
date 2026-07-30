@@ -47,6 +47,12 @@ Color coral(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
 Color teal(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
     ? AppColors.teal
     : AppColors.lightTeal;
+Color pink(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
+    ? AppColors.pink
+    : AppColors.lightPink;
+Color amber(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
+    ? AppColors.amber
+    : AppColors.lightAmber;
 
 // ───────────────────────────────────────────────
 // Scroll Animation Wrapper
