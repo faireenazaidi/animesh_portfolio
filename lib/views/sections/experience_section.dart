@@ -118,14 +118,10 @@ class _ExperienceTimelineTile extends StatelessWidget {
 
             // Content Card
             Expanded(
-              child: Container(
+              child: GlassCard(
                 margin: const EdgeInsets.only(bottom: 40),
                 padding: EdgeInsets.all(isMobile ? 20 : 28),
-                decoration: BoxDecoration(
-                  color: bg2(context),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: line2(context)),
-                ),
+                borderRadius: 20,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,

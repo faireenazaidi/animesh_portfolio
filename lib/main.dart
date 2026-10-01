@@ -20,9 +20,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       // ── Themes ──
-      theme: AppTheme.light(),
+      theme: AppTheme.dark(),
       darkTheme: AppTheme.dark(),
-      themeMode: ThemeMode.light, // default light, toggled via controller
+      themeMode: ThemeMode.dark, // Dark mode exclusive
 
       // ── Initial route + binding ──
       initialRoute: '/',

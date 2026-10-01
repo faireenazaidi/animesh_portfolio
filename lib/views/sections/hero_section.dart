@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:model_viewer_plus/model_viewer_plus.dart';
 import '../../controllers/portfolio_controller.dart';
 import '../../utils/responsive.dart';
 import '../widgets/shared_widgets.dart';
+import '../widgets/video_avatar_widget.dart';
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
@@ -51,25 +51,7 @@ class _DesktopHero extends StatelessWidget {
         Expanded(
           flex: 9,
           child: Center(
-            child: const SizedBox(
-              width: 440,
-              height: 540,
-              child: ModelViewer(
-                src: 'assets/models/avatar.glb',
-                alt: 'Animesh 3D Avatar',
-                autoRotate: true,
-                autoRotateDelay: 0,
-                rotationPerSecond: '15deg',
-                cameraControls: true,
-                disableZoom: false,
-                shadowIntensity: 1,
-                cameraOrbit: '0deg 75deg 140%',
-                fieldOfView: '30deg',
-                backgroundColor: Colors.transparent,
-                loading: Loading.eager,
-              ),
-            ).animate().fadeIn(duration: 800.ms, delay: 300.ms)
-              .slideY(begin: 0.2, end: 0),
+            child: const _RealAvatarWidget(isMobile: false),
           ),
         ),
       ],
@@ -89,29 +71,196 @@ class _MobileHero extends StatelessWidget {
         _HeroContent(c: c),
         const SizedBox(height: 48),
         Center(
-          child: const SizedBox(
-            width: 320,
-            height: 440,
-            child: ModelViewer(
-              src: 'assets/models/avatar.glb',
-              alt: 'Animesh 3D Avatar',
-              autoRotate: true,
-              autoRotateDelay: 0,
-              rotationPerSecond: '15deg',
-              cameraControls: true,
-              disableZoom: false,
-              shadowIntensity: 1,
-              cameraOrbit: '0deg 75deg 140%',
-              fieldOfView: '30deg',
-              backgroundColor: Colors.transparent,
-              loading: Loading.eager,
-            ),
-          ).animate().fadeIn(duration: 800.ms, delay: 300.ms),
+          child: const _RealAvatarWidget(isMobile: true),
         ),
       ],
     );
   }
 }
+
+class _RealAvatarWidget extends StatefulWidget {
+  final bool isMobile;
+  const _RealAvatarWidget({required this.isMobile});
+
+  @override
+  State<_RealAvatarWidget> createState() => _RealAvatarWidgetState();
+}
+
+class _RealAvatarWidgetState extends State<_RealAvatarWidget> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = widget.isMobile ? 320.0 : 440.0;
+    final height = widget.isMobile ? 420.0 : 520.0;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+        width: width,
+        height: height,
+        transform: Matrix4.translationValues(0.0, _isHovered ? -8.0 : 0.0, 0.0),
+        child: Stack(
+          alignment: Alignment.center,
+          clipBehavior: Clip.none,
+          children: [
+            // Background Ambient Glow Aura (Soft light behind avatar)
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 400),
+              width: width * 0.9,
+              height: height * 0.9,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    accent(context).withValues(alpha: _isHovered ? 0.35 : 0.22),
+                    accent(context).withValues(alpha: 0.05),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+
+            // Video Avatar Player (Without rectangular video background / border)
+            SizedBox(
+              width: width * 0.9,
+              height: height * 0.92,
+              child: UniversalVideoAvatar(
+                width: width * 0.9,
+                height: height * 0.92,
+              ),
+            ).animate().fadeIn(duration: 600.ms).slideY(
+                  begin: 0.08,
+                  end: 0,
+                  curve: Curves.easeOutCubic,
+                ),
+
+            // Bottom Floating Badge
+            Positioned(
+              bottom: 12,
+              left: 20,
+              right: 20,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: bg3(context).withValues(alpha: 0.88),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: line2(context)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.15),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 9,
+                      height: 9,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF10B981),
+                        shape: BoxShape.circle,
+                      ),
+                    ).animate(
+                      onPlay: (controller) => controller.repeat(reverse: true),
+                    ).scale(
+                      begin: const Offset(0.8, 0.8),
+                      end: const Offset(1.2, 1.2),
+                      duration: 1000.ms,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'Android & Flutter Engineer',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: ink(context),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            Positioned(
+              top: widget.isMobile ? -8 : 0,
+              left: widget.isMobile ? 8 : 4,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+                decoration: BoxDecoration(
+                  color: bg2(context),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(22),
+                    topRight: Radius.circular(22),
+                    bottomRight: Radius.circular(22),
+                    bottomLeft: Radius.circular(4),
+                  ),
+                  border: Border.all(
+                    color: accent(context).withValues(alpha: 0.5),
+                    width: 1.5,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: accent(context).withValues(alpha: 0.25),
+                      blurRadius: 18,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+                // child: Row(
+                //   mainAxisSize: MainAxisSize.min,
+                //   children: [
+                //     // Waving Hand Animation 👋
+                //     Text(
+                //       '👋',
+                //       style: TextStyle(
+                //         fontSize: widget.isMobile ? 20 : 24,
+                //       ),
+                //     )
+                //         .animate(
+                //           onPlay: (controller) => controller.repeat(reverse: true),
+                //         )
+                //         .rotate(
+                //           begin: -0.14,
+                //           end: 0.14,
+                //           duration: 450.ms,
+                //           curve: Curves.easeInOut,
+                //         ),
+                //     const SizedBox(width: 10),
+                //     // Text(
+                //     //   "Hi! I'm Animesh",
+                //     //   style: GoogleFonts.fraunces(
+                //     //     fontSize: widget.isMobile ? 14 : 16,
+                //     //     fontWeight: FontWeight.w600,
+                //     //     color: ink(context),
+                //     //   ),
+                //     // ),
+                //   ],
+                // ),
+              )
+                  .animate()
+                  .fadeIn(duration: 600.ms, delay: 500.ms)
+                  .scale(
+                    begin: const Offset(0.7, 0.7),
+                    end: const Offset(1.0, 1.0),
+                    curve: Curves.elasticOut,
+                  ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 
 class _HeroContent extends StatelessWidget {
   final PortfolioController c;
@@ -134,7 +283,7 @@ class _HeroContent extends StatelessWidget {
       children: [
         // Badge
         Container(
-          padding: const EdgeInsets.fromLTRB(8, 6, 14, 6),
+          padding: const EdgeInsets.fromLTRB(8, 0, 14, 6),
           decoration: BoxDecoration(
             color: bg3(context),
             border: Border.all(color: line2(context)),

@@ -84,13 +84,9 @@ class _ProfileCard extends StatelessWidget {
     final skills = ['Java', 'Kotlin', 'Flutter', 'Firebase',
       'SQLite', 'REST APIs', 'Room DB', 'Material 3'];
 
-    return Container(
+    return GlassCard(
       padding: const EdgeInsets.all(32),
-      decoration: BoxDecoration(
-        color: bg2(context),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: line2(context)),
-      ),
+      borderRadius: 24,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -85,13 +85,9 @@ class _TestimonialCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GlassCard(
       padding: const EdgeInsets.all(28),
-      decoration: BoxDecoration(
-        color: bg2(context),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: line2(context)),
-      ),
+      borderRadius: 24,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

@@ -15,7 +15,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   flutter_animate: ^4.5.0
   smooth_page_indicator: ^1.1.0
-  model_viewer_plus: ^1.7.0
+  video_player: ^2.9.2
 
 dev_dependencies:
   flutter_test:
@@ -25,5 +25,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/
     - assets/images/
     - assets/models/

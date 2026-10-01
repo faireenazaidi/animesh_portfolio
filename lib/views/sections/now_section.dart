@@ -24,20 +24,9 @@ class NowSection extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1160),
           child: ScrollAnimate(
-            child: Container(
+            child: GlassCard(
               padding: EdgeInsets.all(isMobile ? 24 : 40),
-              decoration: BoxDecoration(
-                color: bg2(context),
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: line2(context)),
-                boxShadow: [
-                  BoxShadow(
-                    color: accent(context).withOpacity(0.05),
-                    blurRadius: 30,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
+              borderRadius: 24,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

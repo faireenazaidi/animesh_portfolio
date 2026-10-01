@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
@@ -13,46 +14,105 @@ import '../../theme/app_theme.dart';
 // ───────────────────────────────────────────────
 Color bg(BuildContext ctx) => Theme.of(ctx).scaffoldBackgroundColor;
 Color bg2(BuildContext ctx) => Theme.of(ctx).colorScheme.surface;
-Color bg3(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.darkBg3
-    : AppColors.lightBg3;
+Color bg3(BuildContext ctx) => AppColors.darkBg3;
 Color ink(BuildContext ctx) => Theme.of(ctx).colorScheme.onSurface;
-Color ink2(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.darkInk2
-    : AppColors.lightInk2;
-Color ink3(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.darkInk3
-    : AppColors.lightInk3;
+Color ink2(BuildContext ctx) => AppColors.darkInk2;
+Color ink3(BuildContext ctx) => AppColors.darkInk3;
 Color line(BuildContext ctx) => Theme.of(ctx).dividerColor;
-Color line2(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.darkLine2
-    : AppColors.lightLine2;
+Color line2(BuildContext ctx) => AppColors.darkLine2;
 
 Color accent(BuildContext ctx) => Theme.of(ctx).colorScheme.primary;
-Color accentDark(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.accentDark
-    : AppColors.lightAccentDark;
-Color accentInk(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.accentInk
-    : AppColors.lightAccentInk;
-Color accentHover(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.accentHover
-    : AppColors.lightAccentHover;
-Color violet(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.violet
-    : AppColors.lightViolet;
-Color coral(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.coral
-    : AppColors.lightCoral;
-Color teal(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.teal
-    : AppColors.lightTeal;
-Color pink(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.pink
-    : AppColors.lightPink;
-Color amber(BuildContext ctx) => Theme.of(ctx).brightness == Brightness.dark
-    ? AppColors.amber
-    : AppColors.lightAmber;
+Color accentDark(BuildContext ctx) => AppColors.accentDark;
+Color accentInk(BuildContext ctx) => AppColors.accentInk;
+Color accentHover(BuildContext ctx) => AppColors.accentHover;
+Color violet(BuildContext ctx) => AppColors.violet;
+Color coral(BuildContext ctx) => AppColors.coral;
+Color teal(BuildContext ctx) => AppColors.teal;
+Color pink(BuildContext ctx) => AppColors.pink;
+Color amber(BuildContext ctx) => AppColors.amber;
+
+// ───────────────────────────────────────────────
+// Glassmorphism Card Container
+// ───────────────────────────────────────────────
+class GlassCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
+  final double borderRadius;
+  final Color? borderColor;
+  final double borderWidth;
+  final double blur;
+  final Color? backgroundColor;
+  final List<BoxShadow>? boxShadow;
+  final VoidCallback? onTap;
+
+  const GlassCard({
+    super.key,
+    required this.child,
+    this.padding,
+    this.margin,
+    this.borderRadius = 20,
+    this.borderColor,
+    this.borderWidth = 1,
+    this.blur = 16,
+    this.backgroundColor,
+    this.boxShadow,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final defaultBg = bg2(context).withOpacity(0.45);
+    final defaultBorder = line2(context).withOpacity(0.35);
+
+    Widget result = Container(
+      margin: margin,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(borderRadius),
+        boxShadow: boxShadow ??
+            [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
+              ),
+            ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+          child: Container(
+            padding: padding,
+            decoration: BoxDecoration(
+              color: backgroundColor ?? defaultBg,
+              borderRadius: BorderRadius.circular(borderRadius),
+              border: Border.all(
+                color: borderColor ?? defaultBorder,
+                width: borderWidth,
+              ),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withOpacity(0.08),
+                  Colors.white.withOpacity(0.01),
+                ],
+                stops: const [0.0, 1.0],
+              ),
+            ),
+            child: child,
+          ),
+        ),
+      ),
+    );
+
+    if (onTap != null) {
+      return GestureDetector(onTap: onTap, child: result);
+    }
+    return result;
+  }
+}
 
 // ───────────────────────────────────────────────
 // Scroll Animation Wrapper
@@ -119,90 +179,92 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     final c = Get.find<PortfolioController>();
     final isMobile = MediaQuery.of(context).size.width < 900;
 
-    return Container(
-      height: 68,
-      decoration: BoxDecoration(
-        color: bg(context).withOpacity(0.92),
-        border: Border(bottom: BorderSide(color: line(context))),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: isMobile ? 18 : 32),
-        child: Row(
-          children: [
-            // Brand Logo
-            GestureDetector(
-              onTap: c.scrollToTop,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Text.rich(TextSpan(children: [
-                  TextSpan(
-                    text: 'animesh',
-                    style: GoogleFonts.fraunces(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: ink(context),
-                    ),
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        child: Container(
+          height: 68,
+          decoration: BoxDecoration(
+            color: bg(context).withOpacity(0.70),
+            border: Border(bottom: BorderSide(color: line2(context).withOpacity(0.3))),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: isMobile ? 18 : 32),
+            child: Row(
+              children: [
+                // Brand Logo
+                GestureDetector(
+                  onTap: c.scrollToTop,
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Text.rich(TextSpan(children: [
+                      TextSpan(
+                        text: 'animesh',
+                        style: GoogleFonts.fraunces(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: ink(context),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '.',
+                        style: GoogleFonts.fraunces(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w700,
+                          color: accent(context),
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'dev',
+                        style: GoogleFonts.fraunces(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: ink(context),
+                        ),
+                      ),
+                    ])),
                   ),
-                  TextSpan(
-                    text: '.',
-                    style: GoogleFonts.fraunces(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w700,
-                      color: accent(context),
-                    ),
+                ),
+                const Spacer(),
+                if (!isMobile) ...[
+                  _NavLink('Work', () => c.scrollToSection(c.workKey)),
+                  const SizedBox(width: 24),
+                  _NavLink('Now', () => c.scrollToSection(c.nowKey)),
+                  const SizedBox(width: 24),
+                  _NavLink('Skills', () => c.scrollToSection(c.skillsKey)),
+                  const SizedBox(width: 24),
+                  _NavLink('Experience', () => c.scrollToSection(c.experienceKey)),
+                  const SizedBox(width: 24),
+                  _NavLink('Certifications', () => c.scrollToSection(c.certsKey)),
+                  const SizedBox(width: 24),
+                  _NavLink('About', () => c.scrollToSection(c.aboutKey)),
+                  const SizedBox(width: 24),
+                  _NavLink('Contact', () => c.scrollToSection(c.contactKey)),
+                  const SizedBox(width: 20),
+                ],
+
+                const SizedBox(width: 8),
+
+                if (!isMobile) ...[
+                  ResumeButton(resumeUrl: c.resumeUrl),
+                  const SizedBox(width: 12),
+                  _AccentPill('Hire me →', () => c.scrollToSection(c.contactKey)),
+                ],
+
+                // Mobile Hamburger Button
+                if (isMobile) ...[
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: Icon(Icons.menu_rounded, color: ink(context), size: 26),
+                    onPressed: () {
+                      Scaffold.of(context).openEndDrawer();
+                    },
+                    tooltip: 'Open menu',
                   ),
-                  TextSpan(
-                    text: 'dev',
-                    style: GoogleFonts.fraunces(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: ink(context),
-                    ),
-                  ),
-                ])),
-              ),
+                ],
+              ],
             ),
-            const Spacer(),
-            if (!isMobile) ...[
-              _NavLink('Work', () => c.scrollToSection(c.workKey)),
-              const SizedBox(width: 24),
-              _NavLink('Now', () => c.scrollToSection(c.nowKey)),
-              const SizedBox(width: 24),
-              _NavLink('Skills', () => c.scrollToSection(c.skillsKey)),
-              const SizedBox(width: 24),
-              _NavLink('Experience', () => c.scrollToSection(c.experienceKey)),
-              const SizedBox(width: 24),
-              _NavLink('Certifications', () => c.scrollToSection(c.certsKey)),
-              const SizedBox(width: 24),
-              _NavLink('About', () => c.scrollToSection(c.aboutKey)),
-              const SizedBox(width: 24),
-              _NavLink('Contact', () => c.scrollToSection(c.contactKey)),
-              const SizedBox(width: 20),
-            ],
-
-            // Theme toggle
-            const ThemeToggleButton(),
-
-            const SizedBox(width: 14),
-
-            if (!isMobile) ...[
-              ResumeButton(resumeUrl: c.resumeUrl),
-              const SizedBox(width: 12),
-              _AccentPill('Hire me →', () => c.scrollToSection(c.contactKey)),
-            ],
-
-            // Mobile Hamburger Button
-            if (isMobile) ...[
-              const SizedBox(width: 8),
-              IconButton(
-                icon: Icon(Icons.menu_rounded, color: ink(context), size: 26),
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-                tooltip: 'Open menu',
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );
@@ -378,53 +440,14 @@ class _MobileNavItem extends StatelessWidget {
 }
 
 // ───────────────────────────────────────────────
-// Theme Toggle Switch Button
+// Theme Toggle (Deprecated - Dark Theme Exclusive)
 // ───────────────────────────────────────────────
 class ThemeToggleButton extends StatelessWidget {
   const ThemeToggleButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final c = Get.find<PortfolioController>();
-    return Obx(() => GestureDetector(
-          onTap: c.toggleTheme,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            width: 52,
-            height: 30,
-            decoration: BoxDecoration(
-              color: bg3(context),
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: line2(context)),
-            ),
-            child: Stack(children: [
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOutCubic,
-                top: 4,
-                left: c.isDark.value ? 4 : 26,
-                child: Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    color: accent(context),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Text(
-                      c.isDark.value ? '☾' : '☀',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: accentInk(context),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ]),
-          ),
-        ));
+    return const SizedBox.shrink();
   }
 }
 
@@ -554,16 +577,39 @@ class _ResumeButtonState extends State<ResumeButton> {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () async {
-          // TODO: Ensure widget.resumeUrl points to your actual resume link
-          final uri = Uri.parse(widget.resumeUrl);
-          if (await canLaunchUrl(uri)) {
-            await launchUrl(uri);
-          } else {
+          String rawUrl = widget.resumeUrl.trim();
+          if (rawUrl.isEmpty) {
             Get.snackbar(
-              'Resume Link',
-              'Please add your real resume URL in PortfolioController (resumeUrl).',
+              'Resume Link Missing',
+              'Please specify a valid resume URL in PortfolioController.',
               snackPosition: SnackPosition.BOTTOM,
             );
+            return;
+          }
+          // Automatically convert GitHub web blob link to direct raw file link
+          if (rawUrl.contains('github.com') && rawUrl.contains('/blob/')) {
+            rawUrl = rawUrl.replaceFirst('/blob/', '/raw/');
+          }
+
+          final uri = Uri.parse(rawUrl);
+          try {
+            final launched = await launchUrl(
+              uri,
+              mode: LaunchMode.externalApplication,
+            );
+            if (!launched) {
+              await launchUrl(uri);
+            }
+          } catch (e) {
+            try {
+              await launchUrl(uri);
+            } catch (_) {
+              Get.snackbar(
+                'Resume Download',
+                'Unable to open resume link. Please check link validity.',
+                snackPosition: SnackPosition.BOTTOM,
+              );
+            }
           }
         },
         child: AnimatedContainer(
@@ -580,7 +626,6 @@ class _ResumeButtonState extends State<ResumeButton> {
           child: Row(
             mainAxisSize:
                 widget.fullWidth ? MainAxisSize.max : MainAxisSize.min,
-
             children: [
               Icon(Icons.download_rounded, size: 16, color: accent(context)),
               const SizedBox(width: 8),
@@ -678,8 +723,7 @@ class ScrollProgressBar extends StatelessWidget {
     final c = Get.find<PortfolioController>();
     return Obx(() => Align(
           alignment: Alignment.centerLeft,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 100),
+          child: Container(
             height: 3,
             width: MediaQuery.of(context).size.width * c.scrollProgress.value,
             decoration: BoxDecoration(
@@ -743,7 +787,7 @@ class SectionHeader extends StatelessWidget {
 }
 
 // ───────────────────────────────────────────────
-// 3D Phone Frame
+// Realistic Smartphone Frame Mockup
 // ───────────────────────────────────────────────
 class PhoneFrame extends StatefulWidget {
   final List<String> imageUrls;
@@ -753,8 +797,8 @@ class PhoneFrame extends StatefulWidget {
   const PhoneFrame({
     super.key,
     required this.imageUrls,
-    this.width = 230,
-    this.height = 480,
+    this.width = 220,
+    this.height = 460,
   });
 
   @override
@@ -774,14 +818,16 @@ class _PhoneFrameState extends State<PhoneFrame> {
     _pageController = PageController();
     if (widget.imageUrls.length > 1) {
       Future.doWhile(() async {
-        await Future.delayed(const Duration(milliseconds: 2800));
+        await Future.delayed(const Duration(milliseconds: 3200));
         if (!mounted) return false;
         final next = (_currentIndex + 1) % widget.imageUrls.length;
-        _pageController.animateToPage(
-          next,
-          duration: const Duration(milliseconds: 600),
-          curve: Curves.easeInOut,
-        );
+        if (_pageController.hasClients) {
+          _pageController.animateToPage(
+            next,
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeInOutCubic,
+          );
+        }
         setState(() => _currentIndex = next);
         return true;
       });
@@ -795,11 +841,11 @@ class _PhoneFrameState extends State<PhoneFrame> {
   }
 
   void _onHover(PointerEvent e, BoxConstraints constraints) {
-    final x = e.localPosition.dx / constraints.maxWidth - 0.2;
-    final y = e.localPosition.dy / constraints.maxHeight - 0.2;
+    final x = (e.localPosition.dx / constraints.maxWidth) - 0.5;
+    final y = (e.localPosition.dy / constraints.maxHeight) - 0.5;
     setState(() {
-      _tiltY = x * 24;
-      _tiltX = -y * 24;
+      _tiltY = x * 14;
+      _tiltX = -y * 14;
       _hovering = true;
     });
   }
@@ -816,6 +862,11 @@ class _PhoneFrameState extends State<PhoneFrame> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
+    // Physical chassis colors
+    final frameBorderColor = isDark ? const Color(0xFF383B40) : const Color(0xFFB0B4BC);
+    const innerBezelColor = Color(0xFF0C0D0E);
+    final buttonColor = isDark ? const Color(0xFF2C2E33) : const Color(0xFF9EABB5);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         return MouseRegion(
@@ -824,10 +875,10 @@ class _PhoneFrameState extends State<PhoneFrame> {
           child: GestureDetector(
             onPanUpdate: (d) {
               setState(() {
-                _tiltY += d.delta.dx * 0.5;
-                _tiltX -= d.delta.dy * 0.5;
-                _tiltY = _tiltY.clamp(-20.0, 20.0);
-                _tiltX = _tiltX.clamp(-20.0, 20.0);
+                _tiltY += d.delta.dx * 0.4;
+                _tiltX -= d.delta.dy * 0.4;
+                _tiltY = _tiltY.clamp(-16.0, 16.0);
+                _tiltX = _tiltX.clamp(-16.0, 16.0);
               });
             },
             onPanEnd: (_) => setState(() {
@@ -837,140 +888,350 @@ class _PhoneFrameState extends State<PhoneFrame> {
             child: Transform(
               alignment: Alignment.center,
               transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
+                ..setEntry(3, 2, 0.0008)
                 ..rotateX(_tiltX * 3.14159 / 180)
                 ..rotateY(_tiltY * 3.14159 / 180),
-              child: Container(
+              child: SizedBox(
                 width: widget.width,
                 height: widget.height,
-                decoration: BoxDecoration(
-                  color: isDark ? AppColors.darkBg3 : AppColors.lightBg3,
-                  borderRadius: BorderRadius.circular(38),
-                  border: Border.all(
-                    color: isDark
-                        ? Colors.white.withOpacity(0.12)
-                        : Colors.black.withOpacity(0.08),
-                    width: 1,
-                  ),
-                  boxShadow: isDark
-                      ? [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.6),
-                            blurRadius: 60,
-                            spreadRadius: -10,
-                            offset: Offset(_tiltY * 0.8, 30 + _tiltX * 0.5),
-                          ),
-                          BoxShadow(
-                            color: AppColors.violet.withOpacity(0.18),
-                            blurRadius: 80,
-                            spreadRadius: -20,
-                            offset: Offset(_tiltY * 0.3, 10),
-                          ),
-                        ]
-                      : [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.14),
-                            blurRadius: 50,
-                            spreadRadius: -8,
-                            offset: Offset(_tiltY * 0.6, 24 + _tiltX * 0.4),
-                          ),
-                        ],
-                ),
-                padding: const EdgeInsets.all(10),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(28),
-                  child: Stack(
-                    children: [
-                      PageView.builder(
-                        controller: _pageController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: widget.imageUrls.length,
-                        itemBuilder: (_, i) => Image.network(
-                          widget.imageUrls[i],
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Container(
-                            color: isDark ? AppColors.darkBg3 : AppColors.lightBg3,
-                            child: Center(
-                              child: Icon(Icons.smartphone_rounded,
-                                  color: ink3(context), size: 40),
-                            ),
-                          ),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    // ── Physical Side Buttons ──
+                    // Left Action Button
+                    Positioned(
+                      left: -2.5,
+                      top: widget.height * 0.18,
+                      child: Container(
+                        width: 2.5,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: buttonColor,
+                          borderRadius: const BorderRadius.horizontal(left: Radius.circular(2)),
                         ),
                       ),
-                      Positioned.fill(
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 120),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment(
-                                (-_tiltY / 20).clamp(-1.0, 1.0),
-                                (_tiltX / 20).clamp(-1.0, 1.0),
-                              ),
-                              end: Alignment(
-                                (_tiltY / 20).clamp(-1.0, 1.0),
-                                (-_tiltX / 20).clamp(-1.0, 1.0),
-                              ),
-                              colors: [
-                                Colors.white.withOpacity(_hovering ? 0.12 : 0.0),
-                                Colors.transparent,
-                                Colors.white.withOpacity(0.0),
-                              ],
-                            ),
-                          ),
+                    ),
+                    // Left Volume Up Button
+                    Positioned(
+                      left: -2.5,
+                      top: widget.height * 0.25,
+                      child: Container(
+                        width: 2.5,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: buttonColor,
+                          borderRadius: const BorderRadius.horizontal(left: Radius.circular(2)),
                         ),
                       ),
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: Container(
-                            width: 80,
-                            height: 22,
-                            decoration: BoxDecoration(
-                              color: isDark ? AppColors.darkBg : AppColors.lightBg,
-                              borderRadius: const BorderRadius.vertical(
-                                bottom: Radius.circular(14),
-                              ),
-                            ),
-                          ),
+                    ),
+                    // Left Volume Down Button
+                    Positioned(
+                      left: -2.5,
+                      top: widget.height * 0.35,
+                      child: Container(
+                        width: 2.5,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: buttonColor,
+                          borderRadius: const BorderRadius.horizontal(left: Radius.circular(2)),
                         ),
                       ),
-                      if (widget.imageUrls.length > 1)
-                        Positioned(
-                          bottom: 14,
-                          left: 0,
-                          right: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                              widget.imageUrls.length,
-                              (i) {
-                                final active = i == _currentIndex;
-                                return AnimatedContainer(
-                                  duration: const Duration(milliseconds: 300),
-                                  margin: const EdgeInsets.symmetric(horizontal: 3),
-                                  width: active ? 14 : 5,
-                                  height: 5,
-                                  decoration: BoxDecoration(
-                                    color: active
-                                        ? accent(context)
-                                        : Colors.white.withOpacity(0.3),
-                                    borderRadius: BorderRadius.circular(3),
+                    ),
+                    // Right Power Button
+                    Positioned(
+                      right: -2.5,
+                      top: widget.height * 0.27,
+                      child: Container(
+                        width: 2.5,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: buttonColor,
+                          borderRadius: const BorderRadius.horizontal(right: Radius.circular(2)),
+                        ),
+                      ),
+                    ),
+
+                    // ── Phone Outer Chassis Frame ──
+                    Container(
+                      width: widget.width,
+                      height: widget.height,
+                      decoration: BoxDecoration(
+                        color: innerBezelColor,
+                        borderRadius: BorderRadius.circular(40),
+                        border: Border.all(
+                          color: frameBorderColor,
+                          width: 2.5,
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(7), // Realistic uniform bezel thickness
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(33),
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            // Screen Wallpaper / App Screens
+                            PageView.builder(
+                              controller: _pageController,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: widget.imageUrls.length,
+                              itemBuilder: (_, i) => Image.network(
+                                widget.imageUrls[i],
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Container(
+                                  color: const Color(0xFF14171A),
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.smartphone_rounded,
+                                      color: ink3(context),
+                                      size: 38,
+                                    ),
                                   ),
-                                );
-                              },
+                                ),
+                              ),
                             ),
-                          ),
+
+                            // Realistic Diagonal Glass Sheen / Specular Glare
+                            Positioned.fill(
+                              child: IgnorePointer(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment(
+                                        (-0.8 + (-_tiltY / 15)).clamp(-1.0, 1.0),
+                                        (-1.0 + (_tiltX / 15)).clamp(-1.0, 1.0),
+                                      ),
+                                      end: Alignment(
+                                        (0.8 + (_tiltY / 15)).clamp(-1.0, 1.0),
+                                        (1.0 + (-_tiltX / 15)).clamp(-1.0, 1.0),
+                                      ),
+                                      colors: [
+                                        Colors.white.withValues(alpha: _hovering ? 0.12 : 0.05),
+                                        Colors.white.withValues(alpha: 0.0),
+                                        Colors.white.withValues(alpha: _hovering ? 0.04 : 0.01),
+                                      ],
+                                      stops: const [0.0, 0.45, 1.0],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // ── Top Status Bar & Dynamic Island ──
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                height: 36,
+                                padding: const EdgeInsets.symmetric(horizontal: 14),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    // Status Bar Left: Clock Time
+                                    Positioned(
+                                      left: 4,
+                                      top: 8,
+                                      child: Text(
+                                        '9:41',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white.withValues(alpha: 0.95),
+                                          letterSpacing: -0.2,
+                                        ),
+                                      ),
+                                    ),
+
+                                    // Top Dynamic Island Pill
+                                    Positioned(
+                                      top: 6,
+                                      child: Container(
+                                        width: 68,
+                                        height: 18,
+                                        decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color: Colors.white.withValues(alpha: 0.08),
+                                            width: 0.5,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const SizedBox(width: 8),
+                                            // Tiny Camera Lens reflection
+                                            Container(
+                                              width: 6,
+                                              height: 6,
+                                              decoration: const BoxDecoration(
+                                                color: Color(0xFF0F1A29),
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Center(
+                                                child: Container(
+                                                  width: 2.5,
+                                                  height: 2.5,
+                                                  decoration: const BoxDecoration(
+                                                    color: Color(0xFF1E3A5F),
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            // FaceID Sensor dot
+                                            Container(
+                                              width: 3.5,
+                                              height: 3.5,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white.withValues(alpha: 0.15),
+                                                shape: BoxShape.circle,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
+                                    // Status Bar Right: Signal, Wifi, Battery
+                                    Positioned(
+                                      right: 4,
+                                      top: 9,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          // Cellular signal bars
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              _signalBar(3),
+                                              const SizedBox(width: 1.5),
+                                              _signalBar(4.5),
+                                              const SizedBox(width: 1.5),
+                                              _signalBar(6),
+                                              const SizedBox(width: 1.5),
+                                              _signalBar(7.5),
+                                            ],
+                                          ),
+                                          const SizedBox(width: 4),
+                                          // WiFi Icon
+                                          const Icon(
+                                            Icons.wifi_rounded,
+                                            size: 10,
+                                            color: Colors.white,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          // Battery Icon
+                                          Container(
+                                            width: 15,
+                                            height: 8,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(2.5),
+                                              border: Border.all(
+                                                color: Colors.white.withValues(alpha: 0.9),
+                                                width: 0.9,
+                                              ),
+                                            ),
+                                            padding: const EdgeInsets.all(1),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Container(
+                                                width: 8.5,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(1),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            // ── Bottom Home Bar Indicator ──
+                            Positioned(
+                              bottom: 8,
+                              left: 0,
+                              right: 0,
+                              child: Center(
+                                child: Container(
+                                  width: 68,
+                                  height: 3.5,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.7),
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // ── Slide Indicator Dots (Floating pill) ──
+                            if (widget.imageUrls.length > 1)
+                              Positioned(
+                                bottom: 18,
+                                left: 0,
+                                right: 0,
+                                child: Center(
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withValues(alpha: 0.5),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: List.generate(
+                                        widget.imageUrls.length,
+                                        (i) {
+                                          final active = i == _currentIndex;
+                                          return AnimatedContainer(
+                                            duration: const Duration(milliseconds: 300),
+                                            margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                                            width: active ? 12 : 4,
+                                            height: 4,
+                                            decoration: BoxDecoration(
+                                              color: active
+                                                  ? Colors.white
+                                                  : Colors.white.withValues(alpha: 0.35),
+                                              borderRadius: BorderRadius.circular(2),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
-                    ],
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _signalBar(double height) {
+    return Container(
+      width: 2,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(0.5),
+      ),
     );
   }
 }
@@ -1029,13 +1290,9 @@ class _SkillBarCardState extends State<SkillBarCard>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GlassCard(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: bg2(context),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: line2(context)),
-      ),
+      borderRadius: 16,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1209,19 +1466,12 @@ class _AppLinkCardState extends State<AppLinkCard> {
             }
           }
         },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          transform: Matrix4.translationValues(0, _hovered && hasUrl ? -3 : 0, 0),
+        child: GlassCard(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: bg3(context),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: _hovered && hasUrl
-                  ? accent(context).withOpacity(0.4)
-                  : line2(context),
-            ),
-          ),
+          borderRadius: 16,
+          borderColor: _hovered && hasUrl
+              ? accent(context).withOpacity(0.5)
+              : line2(context).withOpacity(0.35),
           child: Row(
             children: [
               Container(
@@ -1298,4 +1548,104 @@ class BackToTopButton extends StatelessWidget {
           ),
         ));
   }
+}
+
+// ───────────────────────────────────────────────
+// Ambient Glow & Tech Dot Grid Background Overlay
+// ───────────────────────────────────────────────
+class BackgroundGlowAndGrid extends StatelessWidget {
+  const BackgroundGlowAndGrid({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryAccent = accent(context);
+    final size = MediaQuery.of(context).size;
+    final isMobile = size.width < 700;
+
+    return RepaintBoundary(
+      child: SizedBox(
+        width: size.width,
+        height: size.height,
+        child: IgnorePointer(
+          child: Stack(
+            clipBehavior: Clip.hardEdge,
+            children: [
+              // Top Right Ambient Glow Spot
+              Positioned(
+                top: -80,
+                right: -60,
+                child: Container(
+                  width: isMobile ? 300 : 540,
+                  height: isMobile ? 300 : 540,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        primaryAccent.withOpacity(isDark ? 0.12 : 0.05),
+                        primaryAccent.withOpacity(isDark ? 0.03 : 0.01),
+                        Colors.transparent,
+                      ],
+                      stops: const [0.0, 0.5, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+              // Middle Left Ambient Glow Spot
+              Positioned(
+                top: 400,
+                left: -120,
+                child: Container(
+                  width: isMobile ? 240 : 480,
+                  height: isMobile ? 240 : 480,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        primaryAccent.withOpacity(isDark ? 0.08 : 0.03),
+                        Colors.transparent,
+                      ],
+                      stops: const [0.0, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+              // Custom Hardware-Accelerated Dot Grid Painter
+              CustomPaint(
+                size: Size(size.width, size.height),
+                painter: _DotGridPainter(
+                  color: line(context).withOpacity(isDark ? 0.35 : 0.20),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DotGridPainter extends CustomPainter {
+  final Color color;
+  const _DotGridPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.5
+      ..strokeCap = StrokeCap.round;
+
+    final List<Offset> points = [];
+    const spacing = 36.0;
+    for (double x = spacing / 2; x < size.width; x += spacing) {
+      for (double y = spacing / 2; y < size.height; y += spacing) {
+        points.add(Offset(x, y));
+      }
+    }
+    canvas.drawPoints(PointMode.points, points, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _DotGridPainter oldDelegate) => oldDelegate.color != color;
 }

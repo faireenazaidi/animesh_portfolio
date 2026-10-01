@@ -2,47 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  // Dark theme (Deep Cyber Indigo Canvas with High-Contrast Surfaces)
-  static const darkBg = Color(0xFF0A0E1A);      // Rich Deep Cyber Indigo-Navy
-  static const darkBg2 = Color(0xFF121829);     // Slate Charcoal Surface (L1)
-  static const darkBg3 = Color(0xFF1E2638);     // Elevated Surface (L2 / Hover)
-  static const darkInk = Color(0xFFF8FAFC);     // Primary Text (16.8:1 contrast - AAA)
-  static const darkInk2 = Color(0xFF94A3B8);    // Secondary Text (7.4:1 contrast - AAA)
-  static const darkInk3 = Color(0xFF64748B);    // Muted Text (4.6:1 contrast - AA)
-  static const darkLine = Color(0xFF1E293B);    // Subtle 1px Slate Border Line
-  static const darkLine2 = Color(0xFF334155);   // Focused Slate Border Line
+  // Dark theme (Obsidian Canvas & High-Contrast Surfaces inspired by reference UI image)
+  static const darkBg = Color(0xFF0C0E0F);      // Obsidian Midnight Base Canvas
+  static const darkBg2 = Color(0xFF14171A);     // Deep Charcoal Card & Module Surface (L1)
+  static const darkBg3 = Color(0xFF1E2227);     // Elevated Surface (L2 / Hover / Pills)
+  static const darkInk = Color(0xFFFFFFFF);     // Primary Text (Pure Crisp White)
+  static const darkInk2 = Color(0xFF9DA4B0);    // Secondary Text (Soft Silver-Grey)
+  static const darkInk3 = Color(0xFF6B7280);    // Muted Subtitle Text
+  static const darkLine = Color(0xFF23282E);    // Subtle 1px Dark Card Border Line
+  static const darkLine2 = Color(0xFF323842);   // Active / Focused Border Line
 
-  // Light theme (Cool Off-White Canvas & High-Vibrancy Emerald)
-  static const lightBg = Color(0xFFF8FAFC);     // Cool Slate Off-White Canvas
+  // Light theme (Crisp Warm Porcelain Canvas & Rich Lime Accent)
+  static const lightBg = Color(0xFFF7F9F2);     // Porcelain Off-White Canvas with subtle Lime warmth
   static const lightBg2 = Color(0xFFFFFFFF);    // Pure White Surface (L1)
-  static const lightBg3 = Color(0xFFF1F5F9);    // Cool Tinted Slate Surface (L2 / Hover)
-  static const lightInk = Color(0xFF0F172A);    // Deep Slate Text (17.5:1 contrast - AAA)
-  static const lightInk2 = Color(0xFF334155);   // Secondary Slate Text (9.8:1 contrast - AAA)
-  static const lightInk3 = Color(0xFF64748B);   // Muted Slate Text (4.8:1 contrast - AA)
-  static const lightLine = Color(0xFFE2E8F0);   // Subtle Slate Border Line
-  static const lightLine2 = Color(0xFFCBD5E1);  // Focused Slate Border Line
+  static const lightBg3 = Color(0xFFEEF4E3);    // Tinted Light Pistachio Surface (L2 / Hover)
+  static const lightInk = Color(0xFF0F140C);    // Deep Charcoal-Black Text (16:1 AAA contrast)
+  static const lightInk2 = Color(0xFF475240);   // Secondary Slate-Green Text
+  static const lightInk3 = Color(0xFF6E7A66);   // Muted Sage Text
+  static const lightLine = Color(0xFFE1E7D5);   // Subtle 1px Border Line
+  static const lightLine2 = Color(0xFFC8D3B8);  // Focused Border Line
+
+  // Signature Neon Lime Green / Pistachio Accent (Exact palette from user reference image)
+  static const accent = Color(0xFFD0F253);          // Signature Neon Lime Green (#D0F253)
+  static const accentDark = Color(0xFF98B82B);      // Mid Lime Green
+  static const accentInk = Color(0xFF0C0E0F);       // High-contrast Obsidian Black text on Lime CTA (14.5:1 AAA)
+  static const accentHover = Color(0xFFDEFF63);     // Glowing Neon Lime Hover
 
   // Light theme specific accents
-  static const lightAccent = Color(0xFF059669);     // Rich Deep Emerald Green CTA
-  static const lightAccentDark = Color(0xFF047857); // Deepest Emerald
-  static const lightAccentInk = Color(0xFFFFFFFF);  // White text on primary CTA
-  static const lightAccentHover = Color(0xFF047857); // Emerald Hover
-  static const lightViolet = Color(0xFF7C3AED);     // Deep Electric Violet
-  static const lightCoral = Color(0xFFEA580C);      // Radiant Coral Orange
-  static const lightTeal = Color(0xFF0D9488);       // Deep Ocean Teal
-  static const lightPink = Color(0xFFDB2777);       // Deep Magenta Pink
-  static const lightAmber = Color(0xFFD97706);      // Warm Golden Amber
+  static const lightAccent = Color(0xFF689B00);     // Rich Lime-Forest Green for light mode readability (4.8:1 contrast)
+  static const lightAccentDark = Color(0xFF4E7500); // Deep Forest Lime
+  static const lightAccentInk = Color(0xFFFFFFFF);  // White text on light primary CTA
+  static const lightAccentHover = Color(0xFF5A8700); // Emerald Lime Hover
 
-  // Signature Bright Accents (Cyber Emerald Mint & Electric Violet Palette)
-  static const accent = Color(0xFF00F5D4);          // Bright Neon Cyber Emerald Mint (Replaces Blue)
-  static const accentDark = Color(0xFF059669);      // Deep Emerald
-  static const accentInk = Color(0xFF021B1A);       // Ultra Dark Mint Navy text on CTA (15.2:1 AAA)
-  static const accentHover = Color(0xFF10B981);     // Vibrant Emerald Mint Hover
-  static const violet = Color(0xFFA855F7);          // Electric Amethyst Violet
-  static const coral = Color(0xFFFF5E36);           // Bright Radiant Sunset Coral
-  static const pink = Color(0xFFFF2E93);            // Ultra-Vibrant Neon Magenta Pink
-  static const amber = Color(0xFFFFB800);           // Radiant Electric Gold / Amber
-  static const teal = Color(0xFF14B8A6);            // Dart Teal
+  // Complementary Accents tuned for Lime Theme
+  static const violet = Color(0xFFB77BFF);          // Soft Electric Amethyst
+  static const lightViolet = Color(0xFF7C3AED);     // Deep Violet
+  static const coral = Color(0xFFFF6B4A);           // Warm Sunset Coral
+  static const lightCoral = Color(0xFFEA580C);      // Radiant Orange
+  static const teal = Color(0xFF2DD4BF);            // Bright Mint Teal
+  static const lightTeal = Color(0xFF0D9488);       // Ocean Teal
+  static const pink = Color(0xFFFF52A3);            // Ultra-Vibrant Neon Pink
+  static const lightPink = Color(0xFFDB2777);       // Deep Magenta
+  static const amber = Color(0xFFFACC15);           // Electric Gold / Amber
+  static const lightAmber = Color(0xFFD97706);      // Warm Golden Amber
 }
 
 class AppTheme {
@@ -61,20 +63,7 @@ class AppTheme {
     );
   }
 
-  static ThemeData light() {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.lightBg,
-      colorScheme: const ColorScheme.light(
-        primary: AppColors.lightAccent,
-        surface: AppColors.lightBg2,
-        onSurface: AppColors.lightInk,
-      ),
-      textTheme: _textTheme(AppColors.lightInk),
-      dividerColor: AppColors.lightLine,
-    );
-  }
+  static ThemeData light() => dark();
 
   static TextTheme _textTheme(Color base) {
     return TextTheme(

@@ -120,13 +120,9 @@ class _SkillCategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GlassCard(
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: bg2(context),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: line2(context)),
-      ),
+      borderRadius: 20,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

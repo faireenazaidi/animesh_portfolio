@@ -102,20 +102,12 @@ class _CertCardState extends State<_CertCard> {
             }
           }
         },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          transform:
-              Matrix4.translationValues(0, _hovered && hasUrl ? -4 : 0, 0),
+        child: GlassCard(
           padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: bg2(context),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: _hovered && hasUrl
-                  ? accent(context).withOpacity(0.4)
-                  : line2(context),
-            ),
-          ),
+          borderRadius: 20,
+          borderColor: _hovered && hasUrl
+              ? accent(context).withOpacity(0.5)
+              : line2(context).withOpacity(0.35),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,

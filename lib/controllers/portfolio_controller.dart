@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/models.dart';
 import '../theme/app_theme.dart';
 
 class PortfolioController extends GetxController {
-  final isDark = false.obs;
+  final isDark = true.obs;
 
   void toggleTheme() {
-    isDark.value = !isDark.value;
-    Get.changeThemeMode(isDark.value ? ThemeMode.dark : ThemeMode.light);
+    isDark.value = true;
+    Get.changeThemeMode(ThemeMode.dark);
   }
 
   // ── Scroll Controller & Navigation Keys ──
@@ -98,9 +99,7 @@ class PortfolioController extends GetxController {
     _typeTimer = Timer(delay, _typeLoop);
   }
 
-  // ── TODO: Resume Link Placeholder ──
-  // Replace this URL with your hosted resume PDF (e.g. Google Drive link or static web link)
-  final String resumeUrl = 'https://example.com/Animesh_Pratap_Singh_Resume.pdf'; // TODO: Update with your real Resume PDF URL
+  final String resumeUrl = 'https://raw.githubusercontent.com/faireenazaidi/animesh_portfolio/master/AnimeshAndroidCV.pdf';
 
   // ── Social Links ──
   final socialLinks = const <SocialLinkModel>[
@@ -387,14 +386,32 @@ class PortfolioController extends GetxController {
   void submitContactForm() async {
     if (contactFormKey.currentState?.validate() ?? false) {
       isSubmittingContact.value = true;
-      // Simulate network request
-      await Future.delayed(const Duration(milliseconds: 1200));
+
+      // Construct mailto URI pre-filled with user inputs
+      final String subject = Uri.encodeComponent(
+        subjectController.text.trim().isEmpty
+            ? 'Portfolio Inquiry from ${nameController.text}'
+            : subjectController.text,
+      );
+      final String body = Uri.encodeComponent(
+        'Name: ${nameController.text}\nEmail: ${emailController.text}\n\nMessage:\n${messageController.text}',
+      );
+      final Uri mailtoUri = Uri.parse(
+        'mailto:Animesh.singh222@gmail.com?subject=$subject&body=$body',
+      );
+
+      await Future.delayed(const Duration(milliseconds: 600));
       isSubmittingContact.value = false;
       contactSubmittedSuccess.value = true;
 
+      // Launch default mail client (Gmail/Outlook/Mail app)
+      try {
+        await launchUrl(mailtoUri, mode: LaunchMode.externalApplication);
+      } catch (_) {}
+
       Get.snackbar(
         'Message Sent!',
-        'Thank you for reaching out, Animesh will get back to you shortly.',
+        'Opening your mail app to send message to Animesh.singh222@gmail.com',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: isDark.value ? AppColors.darkBg2 : AppColors.lightAccent,
         colorText: isDark.value ? AppColors.accent : AppColors.lightAccentInk,

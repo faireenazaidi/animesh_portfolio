@@ -17,7 +17,7 @@ class ContactSection extends StatelessWidget {
     return Container(
       key: c.contactKey,
       padding: EdgeInsets.symmetric(
-        vertical: 100,
+        vertical: 80,
         horizontal: isMobile ? 20 : 32,
       ),
       child: Center(
@@ -98,13 +98,9 @@ class ContactSection extends StatelessWidget {
               // Interactive Contact Form
               ScrollAnimate(
                 delay: const Duration(milliseconds: 200),
-                child: Container(
+                child: GlassCard(
                   padding: EdgeInsets.all(isMobile ? 24 : 36),
-                  decoration: BoxDecoration(
-                    color: bg2(context),
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: line2(context)),
-                  ),
+                  borderRadius: 24,
                   child: Form(
                     key: c.contactFormKey,
                     child: Column(
@@ -233,35 +229,35 @@ class ContactSection extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 48),
+           //   const SizedBox(height: 48),
 
               // Social Links Bar
-              ScrollAnimate(
-                delay: const Duration(milliseconds: 300),
-                child: Column(
-                  children: [
-                    Text(
-                      'Connect Across the Web',
-                      style: GoogleFonts.inter(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: ink3(context),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: c.socialLinks
-                          .map((s) => Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: SocialIconButton(social: s),
-                              ))
-                          .toList(),
-                    ),
-                  ],
-                ),
-              ),
+              // ScrollAnimate(
+              //   delay: const Duration(milliseconds: 300),
+              //   child: Column(
+              //     children: [
+              //       Text(
+              //         'Connect Across the Web',
+              //         style: GoogleFonts.inter(
+              //           fontSize: 13,
+              //           fontWeight: FontWeight.w500,
+              //           color: ink3(context),
+              //         ),
+              //       ),
+              //       const SizedBox(height: 16),
+              //       Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: c.socialLinks
+              //             .map((s) => Padding(
+              //                   padding:
+              //                       const EdgeInsets.symmetric(horizontal: 8),
+              //                   child: SocialIconButton(social: s),
+              //                 ))
+              //             .toList(),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -358,19 +354,12 @@ class _ContactCardState extends State<_ContactCard> {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          transform: Matrix4.translationValues(0, _hovered ? -4 : 0, 0),
+        child: GlassCard(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-          decoration: BoxDecoration(
-            color: bg2(context),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: _hovered
-                  ? accent(context).withOpacity(0.4)
-                  : line2(context),
-            ),
-          ),
+          borderRadius: 20,
+          borderColor: _hovered
+              ? accent(context).withOpacity(0.5)
+              : line2(context).withOpacity(0.35),
           child: Column(
             children: [
               Container(
